@@ -333,16 +333,15 @@ autoplot(lending_blend)
 lending_final_stack <- lending_blend %>%
   fit_members()
 
-lending_final_stack(lending_training)
+lending_training_preds <- 
+  lending_training %>%
+  bind_cols(predict(lending_final_stack,. ))
+
+lending_training_preds %>%
+  accuracy(truth= Class, estiamte = .pred_class)
 
 
-  
-preds <- lending_final_test %>%
-  collect_predictions()
-
-preds
-
-conf_mat(preds, Class, .pred_good) 
+conf_mat(lending_training_preds, Class, .pred_good) 
 
 ggplot(aes(x = .pred_good, fill = Class)) + geom_density()
 
