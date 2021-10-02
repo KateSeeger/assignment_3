@@ -337,20 +337,27 @@ lending_training_preds <-
   lending_training %>%
   bind_cols(predict(lending_final_stack,. ))
 
+pred <- lending_training_preds %>%
+  accuracy(truth= Class, estimate = .pred_class)
+
+
+conf_mat(lending_training_preds, Class, .pred_class) 
+
+
 lending_training_preds %>%
-  accuracy(truth= Class, estiamte = .pred_class)
-
-
-conf_mat(lending_training_preds, Class, .pred_good) 
-
-ggplot(aes(x = .pred_good, fill = Class)) + geom_density()
+  ggplot(aes(x= .pred_good, fill = Class)) + geom_density(alpha = 0.5, color = NA)
 
 ```
 
 
+
 14. In the previous problem, you saw that although the accuracy was quite high, the true negative rate (aka sensitivity) was terrible. It's common to see this when one of the classes has low representation. What we want to do now is investigate what happens in each of our models. Below I've provided code to investigate the lasso model (where `lasso_tune` is the name of my tuning step). Do similar things for the random forest and xgboost models. If you'd like to have a better true negative rate, which models would you choose and how would you go about doing this in a less manual way (you don't need to write code to do it - just describe it in words). Be sure to remove the `eval=FALSE` when you are finished.
 
-```{r, eval=FALSE}
+```{r}
+
+lasso_tune %>%
+  collect_metrics()
+
 lasso_tune %>% 
   collect_predictions() %>% 
   group_by(id, penalty) %>% 
@@ -359,6 +366,32 @@ lasso_tune %>%
             true_pos_rate = sum(Class == "good" & .pred_class == "good")/sum(Class == "good")) %>% 
   group_by(penalty) %>% 
   summarize(across(accuracy:true_pos_rate, mean))
+
+lending_rf_tune %>%
+  collect_metrics()
+
+lending_rf_tune %>%
+  collect_predictions() %>%
+  group_by(id, mtry) %>% 
+  summarize(accuracy = sum((Class == .pred_class))/n(),
+            true_neg_rate = sum(Class == "bad" & .pred_class == "bad")/sum(Class == "bad"),
+            true_pos_rate = sum(Class == "good" & .pred_class == "good")/sum(Class == "good")) %>% 
+  group_by(mtry) %>% 
+  summarize(across(accuracy:true_pos_rate, mean))
+
+boost_tune %>%
+  collect_metrics()
+
+boost_tune %>%
+  collect_predictions() %>%
+  group_by(id, learn_rate) %>% 
+  summarize(accuracy = sum((Class == .pred_class))/n(),
+            true_neg_rate = sum(Class == "bad" & .pred_class == "bad")/sum(Class == "bad"),
+            true_pos_rate = sum(Class == "good" & .pred_class == "good")/sum(Class == "good")) %>% 
+  group_by(learn_rate) %>% 
+  summarize(across(accuracy:true_pos_rate, mean))
+
+
 ```
 
 
