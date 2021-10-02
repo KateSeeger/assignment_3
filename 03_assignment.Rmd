@@ -312,7 +312,7 @@ best_boostroc
 lending_stack <- 
   stacks() %>%
   add_candidates(lasso_tune) %>%
-  add_candidates(lendign_rf_tune) %>%
+  add_candidates(lending_rf_tune) %>%
   add_candidates(boost_tune)
   
 lending_blend <- 
