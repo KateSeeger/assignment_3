@@ -409,13 +409,23 @@ In the future, you are going to create an app that allows a user to explore how 
 
 For this week, I want you to answer the following questions:
 
-1. How can you save a model you built to use it later (like in the shiny app you'll create)?
+1. How can you save a model you built to use it later (like in the shiny app you'll create)? 
 
-2. For shiny apps that get published (like yours will), it's very important to have ALL the libraries that are used within the app loaded. If we were going to use the stacked model, which libraries do you think we'd need to load in our app?  
+You want to save the model into the server function. 
+
+
+2. For shiny apps that get published (like yours will), it's very important to have ALL the libraries that are used within the app loaded. If we were going to use the stacked model, which libraries do you think we'd need to load in our app?
+
+Probably, tidyverse, tidymodels, stacks, and patchwork. 
 
 3. You'll want the user to be able to choose values for each variable in the model. How will you come up with the values they can choose for quantitative and categorical data? Give one example for each, either using code or in words.  
 
+For categorical you could do choices in your inputID and for quantitative data you could chose to do a slider in the inputID. 
+
 4. You will need to populate each variable with an initial value. Which value will you choose? Is there a nice way to do this programatically (ie. with code)?
+
+input$variablename
+
 
 ## Function Friday problems
 
@@ -425,6 +435,9 @@ I will link to these separately. They will be posted by Tuesday.
 
 We will be watching some of the [Coded Bias](https://www.codedbias.com/) film together on Thursday. It is streaming on Netflix. Write a short reflection. If you want some prompts, reflect on: What part of the film impacted you the most? Was there a part that surprised you and why? What emotions did you experience while watching?
 
+I'm was really interested in the UK surveillance systems and the fact that AI and facial recognition is essentially unregulated and the difference that people feel about surveilance systems. I think that depending on where data is collected and by whom, the data collected could be really biased. Also, the initial  
+
+recitivism algorithms use for sentencing based on gender, race, class, offence, age, etc to determine risk and risk of repeat offending. and looking at probation times and hich risk probation and increased surveillance.  
 
 REMEMBER TO ADD YOUR GITHUB LINK AT THE TOP OF THE PAGE AND UNCOMMENT THE `knitr` OPTIONS.
 
