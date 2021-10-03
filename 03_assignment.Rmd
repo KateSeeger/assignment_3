@@ -177,9 +177,11 @@ best_accuracy <- lasso_tune %>%
 
 best_accuracy
 
+
+
 ```
 
-
+Best accuracy is preprocessor1_model09 and the accuracy is 0.7416. The area under the curve is 
 
 6. Set up the recipe and the pre-processing steps to build a random forest model. You shouldn't have to do as many steps. The only steps you should need to do are making all integers numeric and the up and down sampling. 
 
@@ -244,7 +246,7 @@ lending_rf_tune %>%
 
   
 ```
-
+Preprocessor1_Model2 with the metric accuracy becayse the accuracy is 0.925. 
 
 10. Next, we will fit a boosted tree using xgboost. We will only tune the `learn_rate` parameter. I have specified the model, recipe, and workflow below already (uncomment the code - you can this by highlighting it and then in the code tab at the top, choose comment/uncomment lines). You need to set up a grid of ten values for the tuning parameter and tune the model. Be sure to add the `control_stack_grid()` for the `control` argument so we can use these results later when we stack.
 
@@ -304,7 +306,7 @@ best_boostroc <- select_best(boost_tune, "roc_auc")
 best_boostroc
 
 ```
-
+Accuracy is 0.8057 and the area under the roc curve is ..........
 
 12. Create a model stack with the candidate models from the previous parts of the exercise and use the `blend_predictions()` function to find the coefficients of the stacked model. Create a plot examining the performance metrics for the different penalty parameters to assure you have captured the best one. If not, adjust the penalty. (HINT: use the `autoplot()` function). Which models are contributing most?
 
@@ -324,6 +326,7 @@ lending_blend
 autoplot(lending_blend)
 ```
 
+Lasso model is contributing the most. 
 
 
 
@@ -348,15 +351,14 @@ lending_training_preds %>%
   ggplot(aes(x= .pred_good, fill = Class)) + geom_density(alpha = 0.5, color = NA)
 
 ```
+My code isn't working BUT based on my matrix, I would expect to see that there is a huge overlap between 
 
+specificity was great as the true positive rate was 100% yet the true negative rate is 0%. 
 
 
 14. In the previous problem, you saw that although the accuracy was quite high, the true negative rate (aka sensitivity) was terrible. It's common to see this when one of the classes has low representation. What we want to do now is investigate what happens in each of our models. Below I've provided code to investigate the lasso model (where `lasso_tune` is the name of my tuning step). Do similar things for the random forest and xgboost models. If you'd like to have a better true negative rate, which models would you choose and how would you go about doing this in a less manual way (you don't need to write code to do it - just describe it in words). Be sure to remove the `eval=FALSE` when you are finished.
 
 ```{r}
-
-lasso_tune %>%
-  collect_metrics()
 
 lasso_tune %>% 
   collect_predictions() %>% 
@@ -367,8 +369,6 @@ lasso_tune %>%
   group_by(penalty) %>% 
   summarize(across(accuracy:true_pos_rate, mean))
 
-lending_rf_tune %>%
-  collect_metrics()
 
 lending_rf_tune %>%
   collect_predictions() %>%
@@ -379,8 +379,6 @@ lending_rf_tune %>%
   group_by(mtry) %>% 
   summarize(across(accuracy:true_pos_rate, mean))
 
-boost_tune %>%
-  collect_metrics()
 
 boost_tune %>%
   collect_predictions() %>%
@@ -391,9 +389,11 @@ boost_tune %>%
   group_by(learn_rate) %>% 
   summarize(across(accuracy:true_pos_rate, mean))
 
-
 ```
 
+If you'd like to have a better true negative rate, which models would you choose and how would you go about doing this in a less manual way (you don't need to write code to do it - just describe it in words). Be sure to remove the `eval=FALSE` when you are finished.
+
+Lasso or xgboost models would be better for a true negative rate. If I were to do this in a less manual way I would maybe create a matrix for each of the models. 
 
 ## Shiny app
 
@@ -411,20 +411,20 @@ For this week, I want you to answer the following questions:
 
 1. How can you save a model you built to use it later (like in the shiny app you'll create)? 
 
-You want to save the model into the server function. 
+You want to save the model into the server and create function you can call later. 
 
 
 2. For shiny apps that get published (like yours will), it's very important to have ALL the libraries that are used within the app loaded. If we were going to use the stacked model, which libraries do you think we'd need to load in our app?
 
-Probably, tidyverse, tidymodels, stacks, and patchwork. 
+I would load these libraries into our app: tidyverse, tidymodels, stacks, and patchwork. 
 
 3. You'll want the user to be able to choose values for each variable in the model. How will you come up with the values they can choose for quantitative and categorical data? Give one example for each, either using code or in words.  
 
-For categorical you could do choices in your inputID and for quantitative data you could chose to do a slider in the inputID. 
+For categorical you could do choices/dropdown menu or buttons in your inputID and for quantitative data you could chose to do a slider in the inputID. 
 
 4. You will need to populate each variable with an initial value. Which value will you choose? Is there a nice way to do this programatically (ie. with code)?
 
-input$variablename
+If you wanted to populate each variable with in initial value you could chose to either set in a variable as default such as 0 or John. Or you could put this code in and it will have it already populated until you change it (input$variablename).
 
 
 ## Function Friday problems
@@ -435,9 +435,7 @@ I will link to these separately. They will be posted by Tuesday.
 
 We will be watching some of the [Coded Bias](https://www.codedbias.com/) film together on Thursday. It is streaming on Netflix. Write a short reflection. If you want some prompts, reflect on: What part of the film impacted you the most? Was there a part that surprised you and why? What emotions did you experience while watching?
 
-I'm was really interested in the UK surveillance systems and the fact that AI and facial recognition is essentially unregulated and the difference that people feel about surveilance systems. I think that depending on where data is collected and by whom, the data collected could be really biased. Also, the initial  
-
-recitivism algorithms use for sentencing based on gender, race, class, offence, age, etc to determine risk and risk of repeat offending. and looking at probation times and hich risk probation and increased surveillance.  
+I think the part of the film that impacted me the most was the algorithms that judicial systems were based on. I believe that they were called recidivism algorithms. These algorithms were used for sentencing based on gender, race, class, offence, age, etc to determine risk and risk of repeat offending. They also were used to determine probation times and high risk probation and increased surveillance. However, they found these algorithms to be incredibly racially biased and it had huge and lasting impacts on people's lives. Due to the data beign collected, the algorithm became incredibly biased and encoded a racist systems.
 
 REMEMBER TO ADD YOUR GITHUB LINK AT THE TOP OF THE PAGE AND UNCOMMENT THE `knitr` OPTIONS.
 
