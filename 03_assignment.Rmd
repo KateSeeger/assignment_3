@@ -338,9 +338,11 @@ lending_final_stack <- lending_blend %>%
 
 lending_training_preds <- 
   lending_training %>%
-  bind_cols(predict(lending_final_stack,. ))
+  bind_cols(predict(lending_final_stack,.)) %>%
+  bind_cols(predict(lending_final_stack,., type = "prob"))
+  
 
-pred <- lending_training_preds %>%
+lending_training_preds %>%
   accuracy(truth= Class, estimate = .pred_class)
 
 
