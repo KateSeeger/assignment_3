@@ -181,7 +181,7 @@ best_accuracy
 
 ```
 
-Best accuracy is preprocessor1_model09 and the accuracy is 0.7416. The area under the curve is 
+Best accuracy is 0.7416 and the area under the curve is 0.7488 for the best tuning parameter model 09. 
 
 6. Set up the recipe and the pre-processing steps to build a random forest model. You shouldn't have to do as many steps. The only steps you should need to do are making all integers numeric and the up and down sampling. 
 
@@ -246,7 +246,7 @@ lending_rf_tune %>%
 
   
 ```
-Preprocessor1_Model2 with the metric accuracy becayse the accuracy is 0.925. 
+Preprocessor1_Model2 with the metric accuracy because the accuracy is 0.925. Model 07 has the best tuning parameter for the ROC under the curve is 0.7426749.  
 
 10. Next, we will fit a boosted tree using xgboost. We will only tune the `learn_rate` parameter. I have specified the model, recipe, and workflow below already (uncomment the code - you can this by highlighting it and then in the code tab at the top, choose comment/uncomment lines). You need to set up a grid of ten values for the tuning parameter and tune the model. Be sure to add the `control_stack_grid()` for the `control` argument so we can use these results later when we stack.
 
@@ -306,7 +306,7 @@ best_boostroc <- select_best(boost_tune, "roc_auc")
 best_boostroc
 
 ```
-Accuracy is 0.8057 and the area under the roc curve is ..........
+Best accuracy is 0.8057 and the area under the roc curve is 0.74587847.	
 
 12. Create a model stack with the candidate models from the previous parts of the exercise and use the `blend_predictions()` function to find the coefficients of the stacked model. Create a plot examining the performance metrics for the different penalty parameters to assure you have captured the best one. If not, adjust the penalty. (HINT: use the `autoplot()` function). Which models are contributing most?
 
@@ -353,9 +353,7 @@ lending_training_preds %>%
   ggplot(aes(x= .pred_good, fill = Class)) + geom_density(alpha = 0.5, color = NA)
 
 ```
-My code isn't working BUT based on my matrix, I would expect to see that there is a huge overlap between 
-
-specificity was great as the true positive rate was 100% yet the true negative rate is 0%. 
+I noticed that the confusion matrix showed that specificity was great as the true positive rate was 100% yet the true negative rate is 0% because the model was predicting everything to be classed as good. And it shows the both the bad and good predictions along the x axis representing good. 
 
 
 14. In the previous problem, you saw that although the accuracy was quite high, the true negative rate (aka sensitivity) was terrible. It's common to see this when one of the classes has low representation. What we want to do now is investigate what happens in each of our models. Below I've provided code to investigate the lasso model (where `lasso_tune` is the name of my tuning step). Do similar things for the random forest and xgboost models. If you'd like to have a better true negative rate, which models would you choose and how would you go about doing this in a less manual way (you don't need to write code to do it - just describe it in words). Be sure to remove the `eval=FALSE` when you are finished.
